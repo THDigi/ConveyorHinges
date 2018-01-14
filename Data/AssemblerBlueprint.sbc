@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<Definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <BlueprintClassEntries>
+    <Entry Class="LargeBlocks" BlueprintSubtypeId="MotorAdvancedStator/LargeConveyorHinge" />
+    <Entry Class="SmallBlocks" BlueprintSubtypeId="MotorAdvancedStator/MediumConveyorHinge" />
+    <Entry Class="SmallBlocks" BlueprintSubtypeId="MotorAdvancedStator/SmallConveyorHinge" />
+    <Entry Class="LargeBlocks" BlueprintSubtypeId="MotorAdvancedRotor/LargeConveyorHingeHead" />
+    <Entry Class="SmallBlocks" BlueprintSubtypeId="MotorAdvancedRotor/MediumConveyorHingeHead" />
+    <Entry Class="SmallBlocks" BlueprintSubtypeId="MotorAdvancedRotor/SmallConveyorHingeHead" />
+  </BlueprintClassEntries>
+</Definitions>

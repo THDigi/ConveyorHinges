@@ -1,0 +1,244 @@
+<?xml version="1.0"?>
+<Definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <CubeBlocks>
+
+    <Definition xsi:type="MyObjectBuilder_MotorAdvancedStatorDefinition">
+      <Id>
+        <TypeId>MotorAdvancedStator</TypeId>
+        <SubtypeId>LargeConveyorHinge</SubtypeId> 
+      </Id>
+      <BlockPairName>ConveyorHinge</BlockPairName>
+      <DisplayName>Conveyor Hinge</DisplayName> 
+      <Icon>Textures\Icons\large.dds</Icon> 
+      <CubeSize>Large</CubeSize> 
+      <BlockTopology>TriangleMesh</BlockTopology> 
+      <Size x="1" y="1" z="1" /> 
+      <ModelOffset x="0" y="0" z="0" />
+      <Model>Models\LargeHinge.mwm</Model> 
+      <Components>
+        <Component Subtype="SteelPlate" Count="10" />
+        <Component Subtype="Construction" Count="12" />
+        <Component Subtype="LargeTube" Count="4" />
+        <Component Subtype="Motor" Count="4" />
+        <Component Subtype="Computer" Count="2" />
+        <Component Subtype="SteelPlate" Count="5" />
+      </Components>
+      <CriticalComponent Subtype="Computer" Index="0" />
+      <MountPoints>
+        <MountPoint Side="Back" StartX="0" StartY="0" EndX="1" EndY="1" />
+      </MountPoints>
+      <BuildProgressModels>
+        <Model BuildPercentUpperBound="1.0" File="Models\LargeHinge_Construction1.mwm" />
+      </BuildProgressModels>
+      <BuildTimeSeconds>20</BuildTimeSeconds>
+      <UseModelIntersection>true</UseModelIntersection>
+      <RotorPart>ConveyorHingeHead</RotorPart>
+      <MirroringY>Z</MirroringY>
+      <MirroringZ>Y</MirroringZ>
+      <ResourceSinkGroup>Utility</ResourceSinkGroup>
+      <RequiredPowerInput>0.002</RequiredPowerInput>
+      <MaxForceMagnitude>3.36E+07</MaxForceMagnitude>
+      <RotorDisplacementMin>0</RotorDisplacementMin>
+      <RotorDisplacementMax>0</RotorDisplacementMax>
+      <RotorDisplacementMinSmall>0</RotorDisplacementMinSmall>
+      <RotorDisplacementMaxSmall>0</RotorDisplacementMaxSmall>
+      <RotorDisplacementInModel>0</RotorDisplacementInModel>
+      <SafetyDetach>5</SafetyDetach>
+      <SafetyDetachMax>5</SafetyDetachMax>
+      <DamageEffectId>212</DamageEffectId>
+      <DamagedSound>ParticleHeavyMech</DamagedSound>
+      <PrimarySound>BlockRotor</PrimarySound>
+    </Definition>
+
+    <Definition>
+      <Id>
+        <TypeId>MotorAdvancedRotor</TypeId>
+        <SubtypeId>LargeConveyorHingeHead</SubtypeId> 
+      </Id>
+      <BlockPairName>ConveyorHingeHead</BlockPairName>
+      <DisplayName>Conveyor Hinge Head</DisplayName> 
+      <Icon>Textures\Icons\largehead.dds</Icon> 
+      <CubeSize>Large</CubeSize> 
+      <BlockTopology>TriangleMesh</BlockTopology> 
+      <Size x="1" y="1" z="1" /> 
+      <ModelOffset x="0" y="0" z="0" />
+      <Model>Models\LargeHingeHead.mwm</Model> 
+      <Components>
+        <Component Subtype="SteelPlate" Count="5" />
+        <Component Subtype="LargeTube" Count="4" />
+      </Components>
+      <CriticalComponent Subtype="SteelPlate" Index="0" />
+      <MountPoints>
+        <MountPoint Side="Front" StartX="0" StartY="0" EndX="3" EndY="3" />
+      </MountPoints>
+      <BuildProgressModels>
+        <Model BuildPercentUpperBound="1.0" File="Models\LargeHingeHead_Construction1.mwm" />
+      </BuildProgressModels>
+      <BuildTimeSeconds>8</BuildTimeSeconds>
+      <UseModelIntersection>true</UseModelIntersection>
+      <MirroringY>Z</MirroringY>
+      <MirroringZ>Y</MirroringZ>
+    </Definition>
+
+    
+    
+    <Definition xsi:type="MyObjectBuilder_MotorAdvancedStatorDefinition">
+      <Id>
+        <TypeId>MotorAdvancedStator</TypeId>
+        <SubtypeId>MediumConveyorHinge</SubtypeId> 
+      </Id>
+      <BlockPairName>ConveyorHinge</BlockPairName>
+      <DisplayName>Conveyor Hinge</DisplayName> 
+      <Icon>Textures\Icons\large.dds</Icon> 
+      <CubeSize>Small</CubeSize> 
+      <BlockTopology>TriangleMesh</BlockTopology> 
+      <Size x="3" y="3" z="3" /> 
+      <ModelOffset x="0" y="0" z="0" />
+      <Model>Models\MediumHinge.mwm</Model> 
+      <Components>
+        <Component Subtype="SteelPlate" Count="8" />
+        <Component Subtype="Construction" Count="8" />
+        <Component Subtype="LargeTube" Count="2" />
+        <Component Subtype="Motor" Count="2" />
+        <Component Subtype="Computer" Count="2" />
+        <Component Subtype="SteelPlate" Count="4" />
+      </Components>
+      <CriticalComponent Subtype="Motor" Index="0" />
+      <MountPoints>
+        <MountPoint Side="Back" StartX="0" StartY="0" EndX="3" EndY="3" />
+      </MountPoints>
+      <BuildProgressModels>
+        <Model BuildPercentUpperBound="1.0" File="Models\MediumHinge_Construction1.mwm" />
+      </BuildProgressModels>
+      <BuildTimeSeconds>10</BuildTimeSeconds>
+      <UseModelIntersection>true</UseModelIntersection>
+      <RotorPart>ConveyorHingeHead</RotorPart>
+      <MirroringY>Z</MirroringY>
+      <MirroringZ>Y</MirroringZ>
+      <ResourceSinkGroup>Utility</ResourceSinkGroup>
+      <RequiredPowerInput>0.0002</RequiredPowerInput>
+      <MaxForceMagnitude>448000</MaxForceMagnitude>
+      <RotorDisplacementMin>0</RotorDisplacementMin>
+      <RotorDisplacementMax>0</RotorDisplacementMax>
+      <RotorDisplacementMinSmall>0</RotorDisplacementMinSmall>
+      <RotorDisplacementMaxSmall>0</RotorDisplacementMaxSmall>
+      <RotorDisplacementInModel>0</RotorDisplacementInModel>
+      <SafetyDetach>5</SafetyDetach>
+      <SafetyDetachMax>5</SafetyDetachMax>
+      <DamageEffectId>212</DamageEffectId>
+      <DamagedSound>ParticleHeavyMech</DamagedSound>
+      <PrimarySound>BlockRotorSmall</PrimarySound>
+    </Definition>
+
+    <Definition>
+      <Id>
+        <TypeId>MotorAdvancedRotor</TypeId>
+        <SubtypeId>MediumConveyorHingeHead</SubtypeId> 
+      </Id>
+      <BlockPairName>ConveyorHingeHead</BlockPairName>
+      <DisplayName>Conveyor Hinge Head</DisplayName> 
+      <Icon>Textures\Icons\largehead.dds</Icon> 
+      <CubeSize>Small</CubeSize> 
+      <BlockTopology>TriangleMesh</BlockTopology> 
+      <Size x="3" y="3" z="3" /> 
+      <ModelOffset x="0" y="0" z="0" />
+      <Model>Models\MediumHingeHead.mwm</Model> 
+      <Components>
+        <Component Subtype="SteelPlate" Count="16" />
+        <Component Subtype="SmallTube" Count="8" />
+      </Components>
+      <CriticalComponent Subtype="SteelPlate" Index="0" />
+      <MountPoints>
+        <MountPoint Side="Front" StartX="0" StartY="0" EndX="3" EndY="3" />
+      </MountPoints>
+      <BuildProgressModels>
+        <Model BuildPercentUpperBound="1.0" File="Models\MediumHingeHead_Construction1.mwm" />
+      </BuildProgressModels>
+      <BuildTimeSeconds>5</BuildTimeSeconds>
+      <UseModelIntersection>true</UseModelIntersection>
+      <MirroringY>Z</MirroringY>
+      <MirroringZ>Y</MirroringZ>
+    </Definition>
+
+
+
+    <Definition xsi:type="MyObjectBuilder_MotorAdvancedStatorDefinition">
+      <Id>
+        <TypeId>MotorAdvancedStator</TypeId>
+        <SubtypeId>SmallConveyorHinge</SubtypeId> 
+      </Id>
+      <BlockPairName>SmallConveyorHinge</BlockPairName>
+      <DisplayName>Small Conveyor Hinge</DisplayName> 
+      <Icon>Textures\Icons\small.dds</Icon> 
+      <CubeSize>Small</CubeSize> 
+      <BlockTopology>TriangleMesh</BlockTopology> 
+      <Size x="1" y="1" z="1" /> 
+      <ModelOffset x="0" y="0" z="0" />
+      <Model>Models\SmallHinge.mwm</Model>
+      <Components>
+        <Component Subtype="SteelPlate" Count="3" />
+        <Component Subtype="Construction" Count="5" />
+        <Component Subtype="SmallTube" Count="1" />
+        <Component Subtype="Motor" Count="1" />
+        <Component Subtype="Computer" Count="1" />
+        <Component Subtype="SteelPlate" Count="2" />
+      </Components>
+      <CriticalComponent Subtype="Motor" Index="0" />
+      <MountPoints>
+        <MountPoint Side="Back" StartX="0" StartY="0" EndX="1" EndY="1" />
+      </MountPoints>
+      <BuildProgressModels>
+        <Model BuildPercentUpperBound="1.0" File="Models\SmallHinge_Construction1.mwm" />
+      </BuildProgressModels>
+      <BuildTimeSeconds>8</BuildTimeSeconds>
+      <UseModelIntersection>true</UseModelIntersection>
+      <RotorPart>SmallConveyorHingeHead</RotorPart>
+      <MirroringY>Z</MirroringY>
+      <MirroringZ>Y</MirroringZ>
+      <ResourceSinkGroup>Utility</ResourceSinkGroup>
+      <RequiredPowerInput>0.0002</RequiredPowerInput>
+      <MaxForceMagnitude>448000</MaxForceMagnitude>
+      <RotorDisplacementMin>0</RotorDisplacementMin>
+      <RotorDisplacementMax>0</RotorDisplacementMax>
+      <RotorDisplacementMinSmall>0</RotorDisplacementMinSmall>
+      <RotorDisplacementMaxSmall>0</RotorDisplacementMaxSmall>
+      <RotorDisplacementInModel>0</RotorDisplacementInModel>
+      <SafetyDetach>5</SafetyDetach>
+      <SafetyDetachMax>5</SafetyDetachMax>
+      <DamageEffectId>212</DamageEffectId>
+      <DamagedSound>ParticleHeavyMech</DamagedSound>
+      <PrimarySound>BlockRotorSmall</PrimarySound>
+    </Definition>
+
+    <Definition>
+      <Id>
+        <TypeId>MotorAdvancedRotor</TypeId>
+        <SubtypeId>SmallConveyorHingeHead</SubtypeId> 
+      </Id>
+      <BlockPairName>SmallConveyorHingeHead</BlockPairName>
+      <DisplayName>Small Conveyor Hinge Head</DisplayName> 
+      <Icon>Textures\Icons\smallhead.dds</Icon> 
+      <CubeSize>Small</CubeSize> 
+      <BlockTopology>TriangleMesh</BlockTopology> 
+      <Size x="1" y="1" z="1" /> 
+      <ModelOffset x="0" y="0" z="0" />
+      <Model>Models\SmallHingeHead.mwm</Model> 
+      <Components>
+        <Component Subtype="SteelPlate" Count="12" />
+        <Component Subtype="SmallTube" Count="6" />
+      </Components>
+      <CriticalComponent Subtype="SteelPlate" Index="0" />
+      <MountPoints>
+        <MountPoint Side="Front" StartX="0" StartY="0" EndX="1" EndY="1" />
+      </MountPoints>
+      <BuildProgressModels>
+        <Model BuildPercentUpperBound="1.0" File="Models\SmallHingeHead_Construction1.mwm" />
+      </BuildProgressModels>
+      <BuildTimeSeconds>3</BuildTimeSeconds>
+      <UseModelIntersection>true</UseModelIntersection>
+      <MirroringY>Z</MirroringY>
+      <MirroringZ>Y</MirroringZ>
+    </Definition>
+
+  </CubeBlocks>
+</Definitions>

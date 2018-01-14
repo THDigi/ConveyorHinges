@@ -1,0 +1,45 @@
+<?xml version="1.0"  encoding="utf-8"?>
+<Definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <CategoryClasses>
+    <Category xsi:type="MyObjectBuilder_GuiBlockCategoryDefinition">
+      <Id>
+        <TypeId>GuiBlockCategoryDefinition</TypeId>
+        <SubtypeId/>
+      </Id>
+      <DisplayName>DisplayName_Category_LargeBlocks</DisplayName>
+      <Name>LargeBlocks</Name>
+      <ItemIds>
+        <string>MotorAdvancedStator/LargeConveyorHinge</string>
+        <string>MotorAdvancedRotor/LargeConveyorHingeHead</string>
+      </ItemIds>
+    </Category>  
+    <Category xsi:type="MyObjectBuilder_GuiBlockCategoryDefinition">
+      <Id>
+        <TypeId>GuiBlockCategoryDefinition</TypeId>
+        <SubtypeId/>
+      </Id>
+      <DisplayName>DisplayName_Category_SmallBlocks</DisplayName>
+      <Name>SmallBlocks</Name>
+      <ItemIds>
+        <string>MotorAdvancedStator/MediumConveyorHinge</string>
+        <string>MotorAdvancedStator/SmallConveyorHinge</string>
+        <string>MotorAdvancedRotor/MediumConveyorHingeHead</string>
+        <string>MotorAdvancedRotor/SmallConveyorHingeHead</string>
+      </ItemIds>
+    </Category>
+    <Category xsi:type="MyObjectBuilder_GuiBlockCategoryDefinition">
+      <Id>
+        <TypeId>GuiBlockCategoryDefinition</TypeId>
+        <SubtypeId/>
+      </Id>
+      <DisplayName>DisplayName_Category_ConveyorBlocks</DisplayName>
+      <Name>Conveyors</Name>
+      <ItemIds>
+        <string>ConveyorHinge</string>
+        <string>SmallConveyorHinge</string>
+        <string>ConveyorHingeHead</string>
+        <string>SmallConveyorHingeHead</string>
+      </ItemIds>
+    </Category>
+  </CategoryClasses>
+</Definitions>
