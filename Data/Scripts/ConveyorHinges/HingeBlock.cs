@@ -25,12 +25,15 @@ namespace Digi.ConveyorHinges
             {
                 ConveyorHingesMod.SetupControls<IMyMotorAdvancedStator>(); // this sets up only once per world
 
-                block = (IMyMotorAdvancedStator)Entity;
-
-                if(block.CubeGrid.Physics != null && ConveyorHingesMod.Instance.HingeLimitsDeg.TryGetValue(block.SlimBlock.BlockDefinition.Id.SubtypeId, out limitRad))
+                if(MyAPIGateway.Multiplayer.IsServer)
                 {
-                    limitRad = MathHelper.ToRadians(limitRad);
-                    NeedsUpdate = MyEntityUpdateEnum.EACH_FRAME;
+                    block = (IMyMotorAdvancedStator)Entity;
+
+                    if(block.CubeGrid.Physics != null && ConveyorHingesMod.Instance.HingeLimitsDeg.TryGetValue(block.SlimBlock.BlockDefinition.Id.SubtypeId, out limitRad))
+                    {
+                        limitRad = MathHelper.ToRadians(limitRad);
+                        NeedsUpdate = MyEntityUpdateEnum.EACH_FRAME;
+                    }
                 }
             }
             catch(Exception e)
@@ -38,14 +41,13 @@ namespace Digi.ConveyorHinges
                 Log.Error(e);
             }
         }
-        
-        //public override void UpdateBeforeSimulation()
+
+        // only called server side because of the condition in UpdateOnceBeforeFrame()
+        // used to ensure that the limits aren't set beyond the limits allowed by the mod.
         public override void UpdateAfterSimulation()
         {
             try
             {
-                // ensure limits don't go beyond their spec
-
                 if(block.LowerLimitRad < -limitRad)
                 {
                     block.LowerLimitRad = -limitRad;
@@ -55,49 +57,6 @@ namespace Digi.ConveyorHinges
                 {
                     block.UpperLimitRad = limitRad;
                 }
-                
-
-                //if(block.Angle > ConveyorHingesMod.LIMIT_BEYOND_RAD)
-                //{
-                //    block.TargetVelocityRPM = -30f;
-                //}
-                //else if(block.Angle < -ConveyorHingesMod.LIMIT_BEYOND_RAD)
-                //{
-                //    block.TargetVelocityRPM = 30f;
-                //}
-
-                //if(Math.Abs(block.LowerLimitRad - prevLowerLimitRad) > 0.0001f)
-                //{
-                //    block.TargetVelocityRad = 0;
-                //    prevLowerLimitRad = block.LowerLimitRad;
-                //}
-
-                //if(Math.Abs(block.UpperLimitRad - prevUpperLimitRad) > 0.0001f)
-                //{
-                //    block.TargetVelocityRad = 0;
-                //    prevUpperLimitRad = block.UpperLimitRad;
-                //}
-
-                //if(Math.Abs(block.Angle) > ConveyorHingesMod.LIMIT_BEYOND_RAD)
-                //{
-                //    if((block.TargetVelocityRad > 0 && block.Angle > 0) || (block.TargetVelocityRad < 0 && block.Angle < 0))
-                //    {
-                //        block.TargetVelocityRad = 0;
-                //    }
-                //}
-
-                //if(Math.Abs(block.Angle) > ConveyorHingesMod.LIMIT_BEYOND_RAD)
-                //{
-                //    if(Math.Abs(prevTargetVelRad) < 0.0001f)
-                //        prevTargetVelRad = block.TargetVelocityRad;
-
-                //    block.TargetVelocityRad = -prevTargetVelRad;
-                //}
-                //else if(Math.Abs(block.Angle) < ConveyorHingesMod.LIMIT_RAD && Math.Abs(prevTargetVelRad) > 0)
-                //{
-                //    block.TargetVelocityRad = prevTargetVelRad;
-                //    prevTargetVelRad = 0f;
-                //}
             }
             catch(Exception e)
             {
