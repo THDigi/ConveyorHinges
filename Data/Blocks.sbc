@@ -5,16 +5,16 @@
     <Definition xsi:type="MyObjectBuilder_MotorAdvancedStatorDefinition">
       <Id>
         <TypeId>MotorAdvancedStator</TypeId>
-        <SubtypeId>LargeConveyorHinge</SubtypeId> 
+        <SubtypeId>LargeConveyorHinge</SubtypeId>
       </Id>
       <BlockPairName>ConveyorHinge</BlockPairName>
-      <DisplayName>Conveyor Hinge</DisplayName> 
-      <Icon>Textures\Icons\large.dds</Icon> 
-      <CubeSize>Large</CubeSize> 
-      <BlockTopology>TriangleMesh</BlockTopology> 
-      <Size x="1" y="1" z="1" /> 
+      <DisplayName>Conveyor Hinge</DisplayName>
+      <Icon>Textures\Icons\LargeHinge.dds</Icon>
+      <CubeSize>Large</CubeSize>
+      <BlockTopology>TriangleMesh</BlockTopology>
+      <Size x="1" y="1" z="1" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models\LargeHinge.mwm</Model> 
+      <Model>Models\LargeHinge.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="10" />
         <Component Subtype="Construction" Count="12" />
@@ -28,7 +28,8 @@
         <MountPoint Side="Back" StartX="0" StartY="0" EndX="1" EndY="1" />
       </MountPoints>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound="1.0" File="Models\LargeHinge_Construction1.mwm" />
+        <Model BuildPercentUpperBound="0.5" File="Models\LargeHinge_Build1.mwm" />
+        <Model BuildPercentUpperBound="1.0" File="Models\LargeHinge_Build2.mwm" />
       </BuildProgressModels>
       <BuildTimeSeconds>20</BuildTimeSeconds>
       <UseModelIntersection>true</UseModelIntersection>
@@ -53,16 +54,16 @@
     <Definition>
       <Id>
         <TypeId>MotorAdvancedRotor</TypeId>
-        <SubtypeId>LargeConveyorHingeHead</SubtypeId> 
+        <SubtypeId>LargeConveyorHingeHead</SubtypeId>
       </Id>
       <BlockPairName>ConveyorHingeHead</BlockPairName>
-      <DisplayName>Conveyor Hinge Head</DisplayName> 
-      <Icon>Textures\Icons\largehead.dds</Icon> 
-      <CubeSize>Large</CubeSize> 
-      <BlockTopology>TriangleMesh</BlockTopology> 
-      <Size x="1" y="1" z="1" /> 
+      <DisplayName>Conveyor Hinge Head</DisplayName>
+      <Icon>Textures\Icons\LargeHingeHead.dds</Icon>
+      <CubeSize>Large</CubeSize>
+      <BlockTopology>TriangleMesh</BlockTopology>
+      <Size x="1" y="1" z="1" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models\LargeHingeHead.mwm</Model> 
+      <Model>Models\LargeHingeHead.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="5" />
         <Component Subtype="LargeTube" Count="4" />
@@ -72,7 +73,8 @@
         <MountPoint Side="Front" StartX="0" StartY="0" EndX="3" EndY="3" />
       </MountPoints>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound="1.0" File="Models\LargeHingeHead_Construction1.mwm" />
+        <Model BuildPercentUpperBound="0.5" File="Models\LargeHingeHead_Build1.mwm" />
+        <Model BuildPercentUpperBound="1.0" File="Models\LargeHingeHead_Build2.mwm" />
       </BuildProgressModels>
       <BuildTimeSeconds>8</BuildTimeSeconds>
       <UseModelIntersection>true</UseModelIntersection>
@@ -80,21 +82,21 @@
       <MirroringZ>Y</MirroringZ>
     </Definition>
 
-    
-    
+
+
     <Definition xsi:type="MyObjectBuilder_MotorAdvancedStatorDefinition">
       <Id>
         <TypeId>MotorAdvancedStator</TypeId>
-        <SubtypeId>MediumConveyorHinge</SubtypeId> 
+        <SubtypeId>MediumConveyorHinge</SubtypeId>
       </Id>
       <BlockPairName>ConveyorHinge</BlockPairName>
-      <DisplayName>Conveyor Hinge</DisplayName> 
-      <Icon>Textures\Icons\large.dds</Icon> 
-      <CubeSize>Small</CubeSize> 
-      <BlockTopology>TriangleMesh</BlockTopology> 
-      <Size x="3" y="3" z="3" /> 
+      <DisplayName>Conveyor Hinge</DisplayName>
+      <Icon>Textures\Icons\MediumHinge.dds</Icon>
+      <CubeSize>Small</CubeSize>
+      <BlockTopology>TriangleMesh</BlockTopology>
+      <Size x="3" y="3" z="3" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models\MediumHinge.mwm</Model> 
+      <Model>Models\MediumHinge.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="8" />
         <Component Subtype="Construction" Count="8" />
@@ -108,7 +110,8 @@
         <MountPoint Side="Back" StartX="0" StartY="0" EndX="3" EndY="3" />
       </MountPoints>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound="1.0" File="Models\MediumHinge_Construction1.mwm" />
+        <Model BuildPercentUpperBound="0.5" File="Models\MediumHinge_Build1.mwm" />
+        <Model BuildPercentUpperBound="1.0" File="Models\MediumHinge_Build2.mwm" />
       </BuildProgressModels>
       <BuildTimeSeconds>10</BuildTimeSeconds>
       <UseModelIntersection>true</UseModelIntersection>
@@ -128,7 +131,7 @@
       <DamageEffectId>212</DamageEffectId>
       <DamagedSound>ParticleHeavyMech</DamagedSound>
       <PrimarySound>BlockRotorSmall</PrimarySound>
-      
+
       <BlockVariants>
         <BlockVariant>
           <TypeId>MotorAdvancedStator</TypeId>
@@ -140,16 +143,16 @@
     <Definition>
       <Id>
         <TypeId>MotorAdvancedRotor</TypeId>
-        <SubtypeId>MediumConveyorHingeHead</SubtypeId> 
+        <SubtypeId>MediumConveyorHingeHead</SubtypeId>
       </Id>
       <BlockPairName>ConveyorHingeHead</BlockPairName>
-      <DisplayName>Conveyor Hinge Head</DisplayName> 
-      <Icon>Textures\Icons\largehead.dds</Icon> 
-      <CubeSize>Small</CubeSize> 
-      <BlockTopology>TriangleMesh</BlockTopology> 
-      <Size x="3" y="3" z="3" /> 
+      <DisplayName>Conveyor Hinge Head</DisplayName>
+      <Icon>Textures\Icons\MediumHingeHead.dds</Icon>
+      <CubeSize>Small</CubeSize>
+      <BlockTopology>TriangleMesh</BlockTopology>
+      <Size x="3" y="3" z="3" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models\MediumHingeHead.mwm</Model> 
+      <Model>Models\MediumHingeHead.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="16" />
         <Component Subtype="SmallTube" Count="8" />
@@ -159,7 +162,8 @@
         <MountPoint Side="Front" StartX="0" StartY="0" EndX="3" EndY="3" />
       </MountPoints>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound="1.0" File="Models\MediumHingeHead_Construction1.mwm" />
+        <Model BuildPercentUpperBound="0.5" File="Models\MediumHingeHead_Build1.mwm" />
+        <Model BuildPercentUpperBound="1.0" File="Models\MediumHingeHead_Build2.mwm" />
       </BuildProgressModels>
       <BuildTimeSeconds>5</BuildTimeSeconds>
       <UseModelIntersection>true</UseModelIntersection>
@@ -172,14 +176,14 @@
     <Definition xsi:type="MyObjectBuilder_MotorAdvancedStatorDefinition">
       <Id>
         <TypeId>MotorAdvancedStator</TypeId>
-        <SubtypeId>SmallConveyorHinge</SubtypeId> 
+        <SubtypeId>SmallConveyorHinge</SubtypeId>
       </Id>
       <BlockPairName>SmallConveyorHinge</BlockPairName>
-      <DisplayName>Small Conveyor Hinge</DisplayName> 
-      <Icon>Textures\Icons\small.dds</Icon> 
-      <CubeSize>Small</CubeSize> 
-      <BlockTopology>TriangleMesh</BlockTopology> 
-      <Size x="1" y="1" z="1" /> 
+      <DisplayName>Small Conveyor Hinge</DisplayName>
+      <Icon>Textures\Icons\SmallHinge.dds</Icon>
+      <CubeSize>Small</CubeSize>
+      <BlockTopology>TriangleMesh</BlockTopology>
+      <Size x="1" y="1" z="1" />
       <ModelOffset x="0" y="0" z="0" />
       <Model>Models\SmallHinge.mwm</Model>
       <Components>
@@ -195,7 +199,7 @@
         <MountPoint Side="Back" StartX="0" StartY="0" EndX="1" EndY="1" />
       </MountPoints>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound="1.0" File="Models\SmallHinge_Construction1.mwm" />
+        <Model BuildPercentUpperBound="1.0" File="Models\SmallHinge_Build1.mwm" />
       </BuildProgressModels>
       <BuildTimeSeconds>8</BuildTimeSeconds>
       <UseModelIntersection>true</UseModelIntersection>
@@ -220,16 +224,16 @@
     <Definition>
       <Id>
         <TypeId>MotorAdvancedRotor</TypeId>
-        <SubtypeId>SmallConveyorHingeHead</SubtypeId> 
+        <SubtypeId>SmallConveyorHingeHead</SubtypeId>
       </Id>
       <BlockPairName>SmallConveyorHingeHead</BlockPairName>
-      <DisplayName>Small Conveyor Hinge Head</DisplayName> 
-      <Icon>Textures\Icons\smallhead.dds</Icon> 
-      <CubeSize>Small</CubeSize> 
-      <BlockTopology>TriangleMesh</BlockTopology> 
-      <Size x="1" y="1" z="1" /> 
+      <DisplayName>Small Conveyor Hinge Head</DisplayName>
+      <Icon>Textures\Icons\SmallHingeHead.dds</Icon>
+      <CubeSize>Small</CubeSize>
+      <BlockTopology>TriangleMesh</BlockTopology>
+      <Size x="1" y="1" z="1" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models\SmallHingeHead.mwm</Model> 
+      <Model>Models\SmallHingeHead.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="12" />
         <Component Subtype="SmallTube" Count="6" />
@@ -239,7 +243,7 @@
         <MountPoint Side="Front" StartX="0" StartY="0" EndX="1" EndY="1" />
       </MountPoints>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound="1.0" File="Models\SmallHingeHead_Construction1.mwm" />
+        <Model BuildPercentUpperBound="1.0" File="Models\SmallHingeHead_Build1.mwm" />
       </BuildProgressModels>
       <BuildTimeSeconds>3</BuildTimeSeconds>
       <UseModelIntersection>true</UseModelIntersection>

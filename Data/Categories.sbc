@@ -12,7 +12,7 @@
         <string>MotorAdvancedStator/LargeConveyorHinge</string>
         <string>MotorAdvancedRotor/LargeConveyorHingeHead</string>
       </ItemIds>
-    </Category>  
+    </Category>
     <Category xsi:type="MyObjectBuilder_GuiBlockCategoryDefinition">
       <Id>
         <TypeId>GuiBlockCategoryDefinition</TypeId>
