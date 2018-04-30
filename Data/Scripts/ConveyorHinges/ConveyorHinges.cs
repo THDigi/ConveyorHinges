@@ -56,7 +56,7 @@ namespace Digi.ConveyorHinges
             public float BlockLengthMul;
         }
 
-        public readonly Dictionary<MyStringHash, HingeData> Hinges = new Dictionary<MyStringHash, HingeData>()
+        public readonly Dictionary<MyStringHash, HingeData> Hinges = new Dictionary<MyStringHash, HingeData>(MyStringHash.Comparer)
         {
             [MyStringHash.GetOrCompute(SMALL_STATOR)] = new HingeData()
             {
@@ -148,7 +148,7 @@ namespace Digi.ConveyorHinges
 
                     var camera = MyAPIGateway.Session.Camera;
                     var coefFOV = (float)Math.Tan(camera.FovWithZoom * 0.5f) / referenceHFOVtangent;
-                    var coefResolution = REFERENCE_RESOLUTION_HEIGHT / (float)MyAPIGateway.Session.Config.ScreenHeight.Value;
+                    var coefResolution = REFERENCE_RESOLUTION_HEIGHT / (float)camera.ViewportSize.Y;
                     LODcoef = coefFOV * coefResolution;
                 }
             }

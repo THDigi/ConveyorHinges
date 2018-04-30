@@ -81,6 +81,10 @@
       <HintPath>C:\Steam\steamapps\common\SpaceEngineers\Bin64\VRage.Game.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="VRage.Input">
+      <HintPath>C:\Steam\steamapps\common\SpaceEngineers\Bin64\VRage.Input.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="VRage.Library, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Steam\steamapps\common\SpaceEngineers\Bin64\VRage.Library.dll</HintPath>
