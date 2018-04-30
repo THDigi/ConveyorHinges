@@ -1,6 +1,7 @@
 using System;
 using Sandbox.Common.ObjectBuilders;
 using Sandbox.Definitions;
+using Sandbox.Game.Entities;
 using Sandbox.ModAPI;
 using VRage.Game;
 using VRage.Game.Components;
@@ -22,6 +23,8 @@ namespace Digi.ConveyorHinges
         private float limitRad;
         private double maxViewDistSq;
         private float blockLength;
+        private float attachRadius;
+        private int attachRequestCooldown = 0;
         private bool isPlayer = false;
         private MyEntitySubpart[] subparts;
         private MyEntitySubpart subpartEnd;
@@ -59,6 +62,7 @@ namespace Digi.ConveyorHinges
                     limitRad = MathHelper.ToRadians(data.MaxAngle);
                     maxViewDistSq = data.MaxViewDistance * data.MaxViewDistance;
                     blockLength = block.CubeGrid.GridSize * 0.5f * data.BlockLengthMul;
+                    attachRadius = data.AttachRadius;
                     curveStart = Vector3.Backward * blockLength;
 
                     NeedsUpdate = MyEntityUpdateEnum.EACH_FRAME | MyEntityUpdateEnum.EACH_10TH_FRAME;
@@ -151,6 +155,9 @@ namespace Digi.ConveyorHinges
                         block.UpperLimitRad = limitRad;
                     }
                 }
+
+                if(attachRequestCooldown > 0)
+                    attachRequestCooldown--;
 
                 if(isPlayer && visible)
                 {
@@ -286,6 +293,92 @@ namespace Digi.ConveyorHinges
             vec.X = data.X * p0.X + data.Y * p1.X + data.Z * p2.X + data.W * p3.X;
             vec.Y = data.X * p0.Y + data.Y * p1.Y + data.Z * p2.Y + data.W * p3.Y;
             vec.Z = data.X * p0.Z + data.Y * p1.Z + data.Z * p2.Z + data.W * p3.Z;
+        }
+
+        /// <summary>
+        /// Finds a suitable 
+        /// </summary>
+        /// <param name="showMessages"></param>
+        public void FindAndAttach(bool showMessages = false)
+        {
+            if(block.IsAttached || attachRequestCooldown > 0)
+                return;
+
+            attachRequestCooldown = 15; // prevent this method from executing for this many ticks
+
+            var sphere = new BoundingSphereD(block.GetPosition(), attachRadius);
+            var radiusSq = attachRadius * attachRadius;
+            var ents = ConveyorHingesMod.Instance.ents;
+            var blocks = ConveyorHingesMod.Instance.blocks;
+
+            ents.Clear();
+            MyGamePruningStructure.GetAllTopMostEntitiesInSphere(ref sphere, ents, MyEntityQueryType.Both);
+
+            byte messageType = 0;
+            int rollAngle = 0;
+
+            foreach(var ent in ents)
+            {
+                var grid = ent as MyCubeGrid;
+
+                if(grid == null || grid.MarkedForClose || grid.Physics == null || grid.IsPreview || grid == block.CubeGrid)
+                    continue;
+
+                grid.Hierarchy?.QuerySphere(ref sphere, blocks);
+
+                foreach(var b in blocks)
+                {
+                    var top = b as IMyAttachableTopBlock;
+
+                    if(top == null || top.MarkedForClose)
+                        continue;
+
+                    if(Vector3D.DistanceSquared(block.GetPosition(), top.GetPosition()) > radiusSq)
+                        continue;
+
+                    if(!ConveyorHingesMod.Instance.HingeTops.Contains(top.SlimBlock.BlockDefinition.Id.SubtypeId))
+                    {
+                        messageType = Math.Max(messageType, (byte)1);
+                        continue;
+                    }
+
+                    var dot = Vector3D.Dot(block.WorldMatrix.Up, top.WorldMatrix.Up);
+                    if(dot < 0.9f)
+                    {
+                        messageType = Math.Max(messageType, (byte)2);
+                        rollAngle = (int)MathHelper.ToDegrees(Math.Acos(dot));
+                        continue;
+                    }
+
+                    if(MyAPIGateway.Multiplayer.IsServer)
+                    {
+                        block.Attach(top);
+                    }
+                    else
+                    {
+                        var bytes = BitConverter.GetBytes(block.EntityId);
+                        MyAPIGateway.Multiplayer.SendMessageToServer(ConveyorHingesMod.PACKET_ID, bytes, true);
+                    }
+
+                    blocks.Clear();
+                    ents.Clear();
+                    return;
+                }
+
+                blocks.Clear();
+            }
+
+            ents.Clear();
+
+            if(showMessages)
+            {
+                switch(messageType)
+                {
+                    case 0: MyAPIGateway.Utilities.ShowNotification("No nearby hinge top to attach to.", 3000, MyFontEnum.White); break;
+                    case 1: MyAPIGateway.Utilities.ShowNotification("Can only attach to conveyor hinge top parts!", 3000, MyFontEnum.Red); break;
+                    case 2: MyAPIGateway.Utilities.ShowNotification($"Nearby hinge top roll is off by {rollAngle} degrees.", 3000, MyFontEnum.Red); break;
+                }
+            }
         }
     }
 }

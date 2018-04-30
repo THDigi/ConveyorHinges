@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using Sandbox.Game.Entities;
 using Sandbox.ModAPI;
 using Sandbox.ModAPI.Interfaces.Terminal;
 using VRage.Game.Components;
+using VRage.Game.Entity;
+using VRage.Game.ModAPI;
 using VRage.Utils;
 using VRageMath;
 
@@ -36,9 +39,16 @@ namespace Digi.ConveyorHinges
         private Action<IMyTerminalBlock, float> sliderUpperLimitSetter;
         private Func<IMyTerminalBlock, bool> addSmallTopPartVisible;
         private Func<IMyTerminalBlock, bool> displacementVisible;
+        private Action<IMyTerminalBlock> attachSetter;
+        private Action<IMyTerminalBlock> attachAction;
         private readonly Dictionary<string, Func<IMyTerminalBlock, bool>> actionEnabled = new Dictionary<string, Func<IMyTerminalBlock, bool>>();
 
-        private const float UNLIMITED = 361f;
+        public readonly List<MyEntity> ents = new List<MyEntity>();
+        public readonly List<MyEntity> blocks = new List<MyEntity>();
+
+        public const ushort PACKET_ID = 8606; // used to send the attach action to server
+
+        public const float UNLIMITED = 361f;
         public const float LIMIT_OFFSET_RAD = 1f / 180f * MathHelper.Pi;
 
         public const string SMALL_STATOR = "SmallConveyorHinge";
@@ -54,6 +64,7 @@ namespace Digi.ConveyorHinges
             public float MaxAngle;
             public float MaxViewDistance;
             public float BlockLengthMul;
+            public float AttachRadius;
         }
 
         public readonly Dictionary<MyStringHash, HingeData> Hinges = new Dictionary<MyStringHash, HingeData>(MyStringHash.Comparer)
@@ -63,19 +74,29 @@ namespace Digi.ConveyorHinges
                 MaxAngle = 90,
                 MaxViewDistance = 75,
                 BlockLengthMul = 1,
+                AttachRadius = 0.1f,
             },
             [MyStringHash.GetOrCompute(MEDIUM_STATOR)] = new HingeData()
             {
                 MaxAngle = 90,
                 MaxViewDistance = 200,
                 BlockLengthMul = 3,
+                AttachRadius = 0.25f,
             },
             [MyStringHash.GetOrCompute(LARGE_STATOR)] = new HingeData()
             {
                 MaxAngle = 90,
                 MaxViewDistance = 300,
                 BlockLengthMul = 1,
+                AttachRadius = 0.5f,
             },
+        };
+
+        public readonly HashSet<MyStringHash> HingeTops = new HashSet<MyStringHash>(MyStringHash.Comparer)
+        {
+            MyStringHash.GetOrCompute("SmallConveyorHingeHead"),
+            MyStringHash.GetOrCompute("MediumConveyorHingeHead"),
+            MyStringHash.GetOrCompute("LargeConveyorHingeHead"),
         };
 
         private static float GetHingeMaxAngle(MyStringHash subtypeId, float defaultValue)
@@ -93,6 +114,9 @@ namespace Digi.ConveyorHinges
             IsInitialized = true;
             IsPlayer = !(MyAPIGateway.Multiplayer.IsServer && MyAPIGateway.Utilities.IsDedicated);
             Log.Init();
+
+            if(MyAPIGateway.Multiplayer.IsServer)
+                MyAPIGateway.Multiplayer.RegisterMessageHandler(PACKET_ID, ReceivedPacket);
 
             if(IsPlayer)
             {
@@ -120,6 +144,8 @@ namespace Digi.ConveyorHinges
             Instance = null;
             IsInitialized = false;
             Log.Close();
+
+            MyAPIGateway.Multiplayer.UnregisterMessageHandler(PACKET_ID, ReceivedPacket);
         }
 
         public override void UpdateAfterSimulation()
@@ -174,6 +200,15 @@ namespace Digi.ConveyorHinges
             {
                 switch(c.Id)
                 {
+                    case "Attach":
+                        var button = (IMyTerminalControlButton)c;
+
+                        if(button.Action != null)
+                            Instance.attachSetter = button.Action;
+
+                        button.Action = Action_Attach;
+                        break;
+
                     case "LowerLimit":
                         slider = Instance.sliderLowerLimit = (IMyTerminalControlSlider)c;
                         slider.SetLimits(Slider_LowerMin, Slider_LowerMax);
@@ -234,6 +269,15 @@ namespace Digi.ConveyorHinges
             {
                 string id = a.Id;
 
+                if(id == "Attach")
+                {
+                    if(a.Action != null)
+                        Instance.attachAction = a.Action;
+
+                    a.Action = Action_Attach;
+                    continue;
+                }
+
                 if(hideActionIds.Contains(id))
                 {
                     if(a.Enabled != null)
@@ -245,6 +289,20 @@ namespace Digi.ConveyorHinges
                         return (func == null ? true : func.Invoke(b)) && !Instance.Hinges.ContainsKey(b.SlimBlock.BlockDefinition.Id.SubtypeId);
                     };
                 }
+            }
+        }
+
+        private static void Action_Attach(IMyTerminalBlock b)
+        {
+            // replacing attach method because the vanilla one is hardcoded for vanilla blocks.
+            // also my method does additional checks to prevent attaching the top part the wrong way around which would cause clang.
+            if(Instance.Hinges.ContainsKey(b.SlimBlock.BlockDefinition.Id.SubtypeId))
+            {
+                b.GameLogic.GetAs<ConveyorHinge>()?.FindAndAttach(showMessages: true);
+            }
+            else
+            {
+                Instance.attachAction?.Invoke(b);
             }
         }
 
@@ -327,5 +385,19 @@ namespace Digi.ConveyorHinges
             return (func == null ? true : func.Invoke(b)) && !Instance.Hinges.ContainsKey(b.SlimBlock.BlockDefinition.Id.SubtypeId);
         }
         #endregion
+
+        private void ReceivedPacket(byte[] bytes)
+        {
+            try
+            {
+                var id = BitConverter.ToInt64(bytes, 0);
+                var block = MyEntities.GetEntityById(id);
+                block?.GameLogic.GetAs<ConveyorHinge>()?.FindAndAttach();
+            }
+            catch(Exception e)
+            {
+                Log.Error(e);
+            }
+        }
     }
 }
