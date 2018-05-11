@@ -17,7 +17,7 @@ using VRageMath;
 namespace Digi.ConveyorHinges
 {
     [MyEntityComponentDescriptor(typeof(MyObjectBuilder_MotorAdvancedStator), false, ConveyorHingesMod.SMALL_STATOR, ConveyorHingesMod.MEDIUM_STATOR, ConveyorHingesMod.LARGE_STATOR)]
-    public class ConveyorHinge : MyGameLogicComponent
+    public class HingeBlock : MyGameLogicComponent
     {
         private IMyMotorAdvancedStator block;
         private float limitRad;

@@ -101,7 +101,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ConveyorHinges.cs" />
+    <Compile Include="ConveyorHingesMod.cs" />
     <Compile Include="HingeBlock.cs" />
     <Compile Include="Log.cs" />
   </ItemGroup>

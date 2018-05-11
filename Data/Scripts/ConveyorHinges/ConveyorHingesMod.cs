@@ -298,7 +298,7 @@ namespace Digi.ConveyorHinges
             // also my method does additional checks to prevent attaching the top part the wrong way around which would cause clang.
             if(Instance.Hinges.ContainsKey(b.SlimBlock.BlockDefinition.Id.SubtypeId))
             {
-                b.GameLogic.GetAs<ConveyorHinge>()?.FindAndAttach(showMessages: true);
+                b.GameLogic.GetAs<HingeBlock>()?.FindAndAttach(showMessages: true);
             }
             else
             {
@@ -392,7 +392,7 @@ namespace Digi.ConveyorHinges
             {
                 var id = BitConverter.ToInt64(bytes, 0);
                 var block = MyEntities.GetEntityById(id);
-                block?.GameLogic.GetAs<ConveyorHinge>()?.FindAndAttach();
+                block?.GameLogic.GetAs<HingeBlock>()?.FindAndAttach();
             }
             catch(Exception e)
             {
