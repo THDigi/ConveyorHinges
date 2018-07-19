@@ -215,7 +215,7 @@ namespace Digi.ConveyorHinges
                 forward = (prevVec - vec);
                 up = Vector3.Cross(forward, Vector3.Right);
 
-                subparts[i].PositionComp.SetLocalMatrix(Matrix.CreateWorld(vec, forward, up));
+                subparts[i].PositionComp.LocalMatrix = Matrix.CreateWorld(vec, forward, up);
 
                 //if(DEBUG_DRAW)
                 //{
@@ -238,13 +238,13 @@ namespace Digi.ConveyorHinges
                 forward = Vector3D.TransformNormal(block.Top.WorldMatrix.Forward, matrix);
                 up = Vector3D.TransformNormal(block.Top.WorldMatrix.Up, matrix);
 
-                subpartEnd.PositionComp.SetLocalMatrix(Matrix.CreateWorld(Vector3.Zero, forward, up));
+                subpartEnd.PositionComp.LocalMatrix = Matrix.CreateWorld(Vector3.Zero, forward, up);
             }
             else
             {
                 vec += Vector3.Normalize(forward) * (blockLength * (ConveyorHingesMod.CURVE_OFFSET + ConveyorHingesMod.CURVE_TRAVEL));
 
-                subpartEnd.PositionComp.SetLocalMatrix(Matrix.CreateWorld(vec, -forward, up));
+                subpartEnd.PositionComp.LocalMatrix = Matrix.CreateWorld(vec, -forward, up);
             }
 
             //if(DEBUG_DRAW)
