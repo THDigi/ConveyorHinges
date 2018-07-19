@@ -38,7 +38,8 @@
       <MirroringZ>Y</MirroringZ>
       <ResourceSinkGroup>Utility</ResourceSinkGroup>
       <RequiredPowerInput>0.002</RequiredPowerInput>
-      <MaxForceMagnitude>3.36E+07</MaxForceMagnitude>
+      <MaxForceMagnitude>1E9</MaxForceMagnitude>
+      <DangerousTorqueThreshold>3.36E+07</DangerousTorqueThreshold>
       <RotorDisplacementMin>0</RotorDisplacementMin>
       <RotorDisplacementMax>0</RotorDisplacementMax>
       <RotorDisplacementMinSmall>0</RotorDisplacementMinSmall>
@@ -49,6 +50,7 @@
       <DamageEffectId>212</DamageEffectId>
       <DamagedSound>ParticleHeavyMech</DamagedSound>
       <PrimarySound>BlockRotor</PrimarySound>
+      <PCU>175</PCU>
     </Definition>
 
     <Definition>
@@ -80,6 +82,7 @@
       <UseModelIntersection>true</UseModelIntersection>
       <MirroringY>Z</MirroringY>
       <MirroringZ>Y</MirroringZ>
+      <PCU>25</PCU>
     </Definition>
 
 
@@ -120,7 +123,8 @@
       <MirroringZ>Y</MirroringZ>
       <ResourceSinkGroup>Utility</ResourceSinkGroup>
       <RequiredPowerInput>0.0002</RequiredPowerInput>
-      <MaxForceMagnitude>448000</MaxForceMagnitude>
+      <MaxForceMagnitude>1E6</MaxForceMagnitude>
+      <DangerousTorqueThreshold>448000</DangerousTorqueThreshold>
       <RotorDisplacementMin>0</RotorDisplacementMin>
       <RotorDisplacementMax>0</RotorDisplacementMax>
       <RotorDisplacementMinSmall>0</RotorDisplacementMinSmall>
@@ -131,6 +135,7 @@
       <DamageEffectId>212</DamageEffectId>
       <DamagedSound>ParticleHeavyMech</DamagedSound>
       <PrimarySound>BlockRotorSmall</PrimarySound>
+      <PCU>175</PCU>
 
       <BlockVariants>
         <BlockVariant>
@@ -169,6 +174,7 @@
       <UseModelIntersection>true</UseModelIntersection>
       <MirroringY>Z</MirroringY>
       <MirroringZ>Y</MirroringZ>
+      <PCU>25</PCU>
     </Definition>
 
 
@@ -208,7 +214,8 @@
       <MirroringZ>Y</MirroringZ>
       <ResourceSinkGroup>Utility</ResourceSinkGroup>
       <RequiredPowerInput>0.0002</RequiredPowerInput>
-      <MaxForceMagnitude>448000</MaxForceMagnitude>
+      <MaxForceMagnitude>1E6</MaxForceMagnitude>
+      <DangerousTorqueThreshold>448000</DangerousTorqueThreshold>
       <RotorDisplacementMin>0</RotorDisplacementMin>
       <RotorDisplacementMax>0</RotorDisplacementMax>
       <RotorDisplacementMinSmall>0</RotorDisplacementMinSmall>
@@ -219,6 +226,7 @@
       <DamageEffectId>212</DamageEffectId>
       <DamagedSound>ParticleHeavyMech</DamagedSound>
       <PrimarySound>BlockRotorSmall</PrimarySound>
+      <PCU>175</PCU>
     </Definition>
 
     <Definition>
@@ -249,6 +257,7 @@
       <UseModelIntersection>true</UseModelIntersection>
       <MirroringY>Z</MirroringY>
       <MirroringZ>Y</MirroringZ>
+      <PCU>25</PCU>
     </Definition>
 
   </CubeBlocks>
