@@ -136,13 +136,6 @@
       <DamagedSound>ParticleHeavyMech</DamagedSound>
       <PrimarySound>BlockRotorSmall</PrimarySound>
       <PCU>175</PCU>
-
-      <BlockVariants>
-        <BlockVariant>
-          <TypeId>MotorAdvancedStator</TypeId>
-          <SubtypeId>SmallConveyorHinge</SubtypeId>
-        </BlockVariant>
-      </BlockVariants>
     </Definition>
 
     <Definition>

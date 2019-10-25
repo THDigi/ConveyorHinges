@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <BlockVariantGroups>
+    <BlockVariantGroup>
+      <Id Type="MyObjectBuilder_BlockVariantGroup" Subtype="ConveyorHinge" />
+      <Icon>Textures\Icons\LargeHinge.dds</Icon>
+      <DisplayName>Conveyor Hinges</DisplayName>
+      <Description>Sideways mountable advanced rotors.</Description>
+      <Blocks>
+        <Block Type="MyObjectBuilder_MotorAdvancedStator" Subtype="LargeConveyorHinge" />
+        <Block Type="MyObjectBuilder_MotorAdvancedStator" Subtype="MediumConveyorHinge" />
+        <Block Type="MyObjectBuilder_MotorAdvancedStator" Subtype="SmallConveyorHinge" />
+      </Blocks>
+    </BlockVariantGroup>
+    <BlockVariantGroup>
+      <Id Type="MyObjectBuilder_BlockVariantGroup" Subtype="ConveyorHingeHead" />
+      <Icon>Textures\Icons\LargeHingeHead.dds</Icon>
+      <DisplayName>Conveyor Hinge Heads</DisplayName>
+      <Description>The attachable top part of hinges.</Description>
+      <Blocks>
+        <Block Type="MyObjectBuilder_MotorAdvancedRotor" Subtype="LargeConveyorHingeHead" />
+        <Block Type="MyObjectBuilder_MotorAdvancedRotor" Subtype="MediumConveyorHingeHead" />
+        <Block Type="MyObjectBuilder_MotorAdvancedRotor" Subtype="SmallConveyorHingeHead" />
+      </Blocks>
+    </BlockVariantGroup>
+  </BlockVariantGroups>
+</Definitions>
