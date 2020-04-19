@@ -49,12 +49,28 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="netstandard, Version=2.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Steam\steamapps\common\SpaceEngineers\Bin64\netstandard.dll</HintPath>
+    </Reference>
+    <Reference Include="ProtoBuf.Net.Core">
+      <HintPath>C:\Steam\steamapps\common\SpaceEngineers\Bin64\ProtoBuf.Net.Core.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Sandbox.Common">
       <HintPath>C:\Steam\SteamApps\common\SpaceEngineers\Bin64\Sandbox.Common.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Sandbox.Game">
       <HintPath>C:\Steam\SteamApps\common\SpaceEngineers\Bin64\Sandbox.Game.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Sandbox.Graphics">
+      <HintPath>C:\Steam\steamapps\common\SpaceEngineers\Bin64\Sandbox.Graphics.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Sandbox.RenderDirect">
+      <HintPath>C:\Steam\steamapps\common\SpaceEngineers\Bin64\Sandbox.RenderDirect.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="SpaceEngineers.Game">
@@ -97,6 +113,14 @@
     <Reference Include="VRage.Render, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Steam\steamapps\common\SpaceEngineers\Bin64\VRage.Render.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="VRage.Render11">
+      <HintPath>C:\Steam\steamapps\common\SpaceEngineers\Bin64\VRage.Render11.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="VRage.Scripting">
+      <HintPath>C:\Steam\steamapps\common\SpaceEngineers\Bin64\VRage.Scripting.dll</HintPath>
       <Private>False</Private>
     </Reference>
   </ItemGroup>
