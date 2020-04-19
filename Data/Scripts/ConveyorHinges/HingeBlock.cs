@@ -49,7 +49,7 @@ namespace Digi.ConveyorHinges
         {
             try
             {
-                ConveyorHingesMod.SetupControls<IMyMotorAdvancedStator>(); // this sets up only once per world
+                ConveyorHingesMod.SetupControls(); // this sets up only once per world
 
                 block = (IMyMotorAdvancedStator)Entity;
 
@@ -116,9 +116,11 @@ namespace Digi.ConveyorHinges
                     return false;
                 }
 
+                var subpartNames = ConveyorHingesMod.Instance.SubpartNames;
+
                 for(int i = 0; i < ConveyorHingesMod.SUBPART_COUNT; ++i)
                 {
-                    var subpart = subparts[i] = GetAndTweakSubpart($"Part{i + 1}");
+                    var subpart = subparts[i] = GetAndTweakSubpart(subpartNames[i]);
 
                     if(subpart == null)
                     {
@@ -200,7 +202,7 @@ namespace Digi.ConveyorHinges
                 curveEnd = ragdollPositionLocal;
             }
 
-            var curveData = ConveyorHingesMod.Instance.curveData;
+            var curveData = ConveyorHingesMod.Instance.CurveData;
             var prevVec = curveStart;
 
             //if(DEBUG_DRAW)
@@ -215,7 +217,8 @@ namespace Digi.ConveyorHinges
                 forward = (prevVec - vec);
                 up = Vector3.Cross(forward, Vector3.Right);
 
-                subparts[i].PositionComp.LocalMatrix = Matrix.CreateWorld(vec, forward, up);
+                var lm = Matrix.CreateWorld(vec, forward, up);
+                subparts[i].PositionComp.SetLocalMatrix(ref lm);
 
                 //if(DEBUG_DRAW)
                 //{
@@ -238,13 +241,15 @@ namespace Digi.ConveyorHinges
                 forward = Vector3D.TransformNormal(block.Top.WorldMatrix.Forward, matrix);
                 up = Vector3D.TransformNormal(block.Top.WorldMatrix.Up, matrix);
 
-                subpartEnd.PositionComp.LocalMatrix = Matrix.CreateWorld(Vector3.Zero, forward, up);
+                var lm = Matrix.CreateWorld(Vector3.Zero, forward, up);
+                subpartEnd.PositionComp.SetLocalMatrix(ref lm);
             }
             else
             {
                 vec += Vector3.Normalize(forward) * (blockLength * (ConveyorHingesMod.CURVE_OFFSET + ConveyorHingesMod.CURVE_TRAVEL));
 
-                subpartEnd.PositionComp.LocalMatrix = Matrix.CreateWorld(vec, -forward, up);
+                var lm = Matrix.CreateWorld(vec, -forward, up);
+                subpartEnd.PositionComp.SetLocalMatrix(ref lm);
             }
 
             //if(DEBUG_DRAW)
@@ -274,7 +279,6 @@ namespace Digi.ConveyorHinges
         private MyEntitySubpart GetAndTweakSubpart(string name)
         {
             MyEntitySubpart subpart;
-
             if(!block.TryGetSubpart(name, out subpart))
                 return null;
 
@@ -308,8 +312,8 @@ namespace Digi.ConveyorHinges
 
             var sphere = new BoundingSphereD(block.GetPosition(), attachRadius);
             var radiusSq = attachRadius * attachRadius;
-            var ents = ConveyorHingesMod.Instance.ents;
-            var blocks = ConveyorHingesMod.Instance.blocks;
+            var ents = ConveyorHingesMod.Instance.Ents;
+            var blocks = ConveyorHingesMod.Instance.Blocks;
 
             ents.Clear();
             MyGamePruningStructure.GetAllTopMostEntitiesInSphere(ref sphere, ents, MyEntityQueryType.Both);
@@ -376,7 +380,7 @@ namespace Digi.ConveyorHinges
                 {
                     case 0: MyAPIGateway.Utilities.ShowNotification("No nearby hinge top to attach to.", 3000, MyFontEnum.White); break;
                     case 1: MyAPIGateway.Utilities.ShowNotification("Can only attach to conveyor hinge top parts!", 3000, MyFontEnum.Red); break;
-                    case 2: MyAPIGateway.Utilities.ShowNotification($"Nearby hinge top roll is off by {rollAngle} degrees.", 3000, MyFontEnum.Red); break;
+                    case 2: MyAPIGateway.Utilities.ShowNotification($"Nearby hinge top roll is off by {rollAngle.ToString("0.##")} degrees.", 3000, MyFontEnum.Red); break;
                 }
             }
         }

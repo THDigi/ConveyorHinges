@@ -25,7 +25,7 @@ namespace Digi.ConveyorHinges
         public bool IsInitialized = false;
         public bool IsPlayer = false;
         public float LODcoef = 1f;
-        public Vector4[] curveData;
+        public Vector4[] CurveData;
 
         private byte skipLODcheck = 0;
         private float referenceHFOVtangent = 0;
@@ -43,8 +43,10 @@ namespace Digi.ConveyorHinges
         private Action<IMyTerminalBlock> attachAction;
         private readonly Dictionary<string, Func<IMyTerminalBlock, bool>> actionEnabled = new Dictionary<string, Func<IMyTerminalBlock, bool>>();
 
-        public readonly List<MyEntity> ents = new List<MyEntity>();
-        public readonly List<MyEntity> blocks = new List<MyEntity>();
+        public readonly List<MyEntity> Ents = new List<MyEntity>();
+        public readonly List<MyEntity> Blocks = new List<MyEntity>();
+
+        public readonly string[] SubpartNames = new string[SUBPART_COUNT];
 
         public const ushort PACKET_ID = 8606; // used to send the attach action to server
 
@@ -118,12 +120,17 @@ namespace Digi.ConveyorHinges
             if(MyAPIGateway.Multiplayer.IsServer)
                 MyAPIGateway.Multiplayer.RegisterMessageHandler(PACKET_ID, ReceivedPacket);
 
+            for(int i = 0; i < SubpartNames.Length; ++i)
+            {
+                SubpartNames[i] = "Part" + (i + 1).ToString();
+            }
+
             if(IsPlayer)
             {
                 // precalculate curve data
-                curveData = new Vector4[SUBPART_COUNT];
+                CurveData = new Vector4[SUBPART_COUNT];
 
-                for(int i = 0; i < curveData.Length; ++i)
+                for(int i = 0; i < CurveData.Length; ++i)
                 {
                     var t = CURVE_OFFSET + (i * CURVE_TRAVEL);
 
@@ -134,7 +141,7 @@ namespace Digi.ConveyorHinges
                     var p2mul = 3 * rtt * t;
                     var p3mul = t * t * t;
 
-                    curveData[i] = new Vector4(p0mul, p1mul, p2mul, p3mul);
+                    CurveData[i] = new Vector4(p0mul, p1mul, p2mul, p3mul);
                 }
             }
         }
@@ -185,15 +192,15 @@ namespace Digi.ConveyorHinges
         }
 
         #region Edit terminal controls
-        public static void SetupControls<T>()
+        public static void SetupControls()
         {
             if(Instance.parsedTerminalControls)
                 return;
 
             Instance.parsedTerminalControls = true;
 
-            var controls = new List<IMyTerminalControl>();
-            MyAPIGateway.TerminalControls.GetControls<T>(out controls);
+            List<IMyTerminalControl> controls;
+            MyAPIGateway.TerminalControls.GetControls<IMyMotorAdvancedStator>(out controls);
             IMyTerminalControlSlider slider;
 
             foreach(var c in controls)
@@ -262,7 +269,7 @@ namespace Digi.ConveyorHinges
                 "ResetDisplacement",
             };
 
-            var actions = new List<IMyTerminalAction>();
+            List<IMyTerminalAction> actions;
             MyAPIGateway.TerminalControls.GetActions<IMyMotorAdvancedStator>(out actions);
 
             foreach(var a in actions)
