@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using Sandbox.Common.ObjectBuilders;
 using Sandbox.Game.Entities;
 using Sandbox.ModAPI;
 using Sandbox.ModAPI.Interfaces.Terminal;
+using VRage.Game;
 using VRage.Game.Components;
 using VRage.Game.Entity;
 using VRage.Game.ModAPI;
@@ -37,11 +39,8 @@ namespace Digi.ConveyorHinges
         private Action<IMyTerminalBlock, float> sliderVelocitySetter;
         private Action<IMyTerminalBlock, float> sliderLowerLimitSetter;
         private Action<IMyTerminalBlock, float> sliderUpperLimitSetter;
-        private Func<IMyTerminalBlock, bool> addSmallTopPartVisible;
-        private Func<IMyTerminalBlock, bool> displacementVisible;
         private Action<IMyTerminalBlock> attachSetter;
         private Action<IMyTerminalBlock> attachAction;
-        private readonly Dictionary<string, Func<IMyTerminalBlock, bool>> actionEnabled = new Dictionary<string, Func<IMyTerminalBlock, bool>>();
 
         public readonly List<MyEntity> Ents = new List<MyEntity>();
         public readonly List<MyEntity> Blocks = new List<MyEntity>();
@@ -69,23 +68,23 @@ namespace Digi.ConveyorHinges
             public float AttachRadius;
         }
 
-        public readonly Dictionary<MyStringHash, HingeData> Hinges = new Dictionary<MyStringHash, HingeData>(MyStringHash.Comparer)
+        public readonly Dictionary<MyDefinitionId, HingeData> Hinges = new Dictionary<MyDefinitionId, HingeData>(MyDefinitionId.Comparer)
         {
-            [MyStringHash.GetOrCompute(SMALL_STATOR)] = new HingeData()
+            [new MyDefinitionId(typeof(MyObjectBuilder_MotorAdvancedStator), SMALL_STATOR)] = new HingeData()
             {
                 MaxAngle = 90,
                 MaxViewDistance = 75,
                 BlockLengthMul = 1,
                 AttachRadius = 0.1f,
             },
-            [MyStringHash.GetOrCompute(MEDIUM_STATOR)] = new HingeData()
+            [new MyDefinitionId(typeof(MyObjectBuilder_MotorAdvancedStator), MEDIUM_STATOR)] = new HingeData()
             {
                 MaxAngle = 90,
                 MaxViewDistance = 200,
                 BlockLengthMul = 3,
                 AttachRadius = 0.25f,
             },
-            [MyStringHash.GetOrCompute(LARGE_STATOR)] = new HingeData()
+            [new MyDefinitionId(typeof(MyObjectBuilder_MotorAdvancedStator), LARGE_STATOR)] = new HingeData()
             {
                 MaxAngle = 90,
                 MaxViewDistance = 300,
@@ -101,32 +100,26 @@ namespace Digi.ConveyorHinges
             MyStringHash.GetOrCompute("LargeConveyorHingeHead"),
         };
 
-        private static float GetHingeMaxAngle(MyStringHash subtypeId, float defaultValue)
-        {
-            HingeData data;
-
-            if(Instance.Hinges.TryGetValue(subtypeId, out data))
-                return data.MaxAngle;
-
-            return defaultValue;
-        }
-
-        public void Init()
+        public override void BeforeStart()
         {
             IsInitialized = true;
             IsPlayer = !(MyAPIGateway.Multiplayer.IsServer && MyAPIGateway.Utilities.IsDedicated);
             Log.Init();
-
-            if(MyAPIGateway.Multiplayer.IsServer)
-                MyAPIGateway.Multiplayer.RegisterMessageHandler(PACKET_ID, ReceivedPacket);
 
             for(int i = 0; i < SubpartNames.Length; ++i)
             {
                 SubpartNames[i] = "Part" + (i + 1).ToString();
             }
 
+            if(MyAPIGateway.Multiplayer.IsServer)
+            {
+                MyAPIGateway.Multiplayer.RegisterMessageHandler(PACKET_ID, ReceivedPacket);
+            }
+
             if(IsPlayer)
             {
+                SetUpdateOrder(MyUpdateOrder.AfterSimulation);
+
                 // precalculate curve data
                 CurveData = new Vector4[SUBPART_COUNT];
 
@@ -159,14 +152,6 @@ namespace Digi.ConveyorHinges
         {
             try
             {
-                if(!IsInitialized)
-                {
-                    if(MyAPIGateway.Session == null)
-                        return;
-
-                    Init();
-                }
-
                 if(IsPlayer && ++skipLODcheck >= 30) // 60/<this> = updates per second
                 {
                     skipLODcheck = 0;
@@ -191,6 +176,20 @@ namespace Digi.ConveyorHinges
             }
         }
 
+        private void ReceivedPacket(byte[] bytes)
+        {
+            try
+            {
+                var id = BitConverter.ToInt64(bytes, 0);
+                var block = MyEntities.GetEntityById(id);
+                block?.GameLogic.GetAs<HingeBlock>()?.FindAndAttach();
+            }
+            catch(Exception e)
+            {
+                Log.Error(e);
+            }
+        }
+
         #region Edit terminal controls
         public static void SetupControls()
         {
@@ -198,6 +197,8 @@ namespace Digi.ConveyorHinges
                 return;
 
             Instance.parsedTerminalControls = true;
+
+            var isNotHingeFunc = new Func<IMyTerminalBlock, bool>(IsNotHinge);
 
             List<IMyTerminalControl> controls;
             MyAPIGateway.TerminalControls.GetControls<IMyMotorAdvancedStator>(out controls);
@@ -207,6 +208,7 @@ namespace Digi.ConveyorHinges
             {
                 switch(c.Id)
                 {
+                    // overwritten/appended-to terminal functions
                     case "Attach":
                         var button = (IMyTerminalControlButton)c;
 
@@ -245,166 +247,175 @@ namespace Digi.ConveyorHinges
                         slider.Setter = Slider_VelocitySetter;
                         break;
 
-                    case "Add Small Top Part": // removed because requires a special model to fit properly
-                        if(c.Visible != null)
-                            Instance.addSmallTopPartVisible = c.Visible;
-
-                        c.Visible = Control_AddSmallTopPartVisible;
-                        break;
-
-                    case "Displacement":
-                        if(c.Visible != null)
-                            Instance.displacementVisible = c.Visible;
-
-                        c.Visible = Control_DisplacementVisible;
+                    // these are hidden for hinges
+                    case "Add Small Top Part": // requires a special model to fit properly
+                    case "Displacement": // displacement has no useful purpose for this block
+                        c.Visible = CombineFunc.Create(c.Visible, isNotHingeFunc);
                         break;
                 }
             }
-
-            var hideActionIds = new HashSet<string>()
-            {
-                "Add Small Top Part", // removed because requires a special model to fit properly
-                "IncreaseDisplacement",
-                "DecreaseDisplacement",
-                "ResetDisplacement",
-            };
 
             List<IMyTerminalAction> actions;
             MyAPIGateway.TerminalControls.GetActions<IMyMotorAdvancedStator>(out actions);
 
             foreach(var a in actions)
             {
-                string id = a.Id;
-
-                if(id == "Attach")
+                switch(a.Id)
                 {
-                    if(a.Action != null)
-                        Instance.attachAction = a.Action;
+                    case "Attach":
+                        if(a.Action != null)
+                            Instance.attachAction = a.Action;
+                        a.Action = Action_Attach;
+                        break;
 
-                    a.Action = Action_Attach;
-                    continue;
-                }
-
-                if(hideActionIds.Contains(id))
-                {
-                    if(a.Enabled != null)
-                        Instance.actionEnabled[id] = a.Enabled;
-
-                    a.Enabled = (b) =>
-                    {
-                        var func = Instance.actionEnabled.GetValueOrDefault(id, null);
-                        return (func == null ? true : func.Invoke(b)) && !Instance.Hinges.ContainsKey(b.SlimBlock.BlockDefinition.Id.SubtypeId);
-                    };
+                    case "Add Small Top Part": // requires a special model to fit properly
+                    case "IncreaseDisplacement": // displacement has no useful purpose for this block
+                    case "DecreaseDisplacement":
+                    case "ResetDisplacement":
+                        a.Enabled = CombineFunc.Create(a.Enabled, isNotHingeFunc);
+                        break;
                 }
             }
+        }
+
+        private static bool IsNotHinge(IMyTerminalBlock b)
+        {
+            try
+            {
+                return !Instance.Hinges.ContainsKey(b.SlimBlock.BlockDefinition.Id);
+            }
+            catch(Exception e)
+            {
+                Log.Error(e);
+            }
+
+            return true;
         }
 
         private static void Action_Attach(IMyTerminalBlock b)
         {
-            // replacing attach method because the vanilla one is hardcoded for vanilla blocks.
-            // also my method does additional checks to prevent attaching the top part the wrong way around which would cause clang.
-            if(Instance.Hinges.ContainsKey(b.SlimBlock.BlockDefinition.Id.SubtypeId))
-            {
-                b.GameLogic.GetAs<HingeBlock>()?.FindAndAttach(showMessages: true);
-            }
-            else
-            {
-                Instance.attachAction?.Invoke(b);
-            }
-        }
-
-        private static float Slider_LowerMin(IMyTerminalBlock b)
-        {
-            return -GetHingeMaxAngle(b.SlimBlock.BlockDefinition.Id.SubtypeId, UNLIMITED);
-        }
-
-        private static float Slider_LowerMax(IMyTerminalBlock b)
-        {
-            return GetHingeMaxAngle(b.SlimBlock.BlockDefinition.Id.SubtypeId, 360f);
-        }
-
-        private static float Slider_UpperMin(IMyTerminalBlock b)
-        {
-            return -GetHingeMaxAngle(b.SlimBlock.BlockDefinition.Id.SubtypeId, 360f);
-        }
-
-        private static float Slider_UpperMax(IMyTerminalBlock b)
-        {
-            return GetHingeMaxAngle(b.SlimBlock.BlockDefinition.Id.SubtypeId, UNLIMITED);
-        }
-
-        private static void Slider_VelocitySetter(IMyTerminalBlock b, float v)
-        {
-            if(Instance.Hinges.ContainsKey(b.SlimBlock.BlockDefinition.Id.SubtypeId))
-            {
-                var stator = (IMyMotorAdvancedStator)b;
-
-                if((stator.Angle < (stator.LowerLimitRad - LIMIT_OFFSET_RAD) && v < 0) || (stator.Angle > (stator.UpperLimitRad + LIMIT_OFFSET_RAD) && v > 0))
-                {
-                    Instance.sliderVelocitySetter?.Invoke(b, 0);
-                    Instance.sliderVelocity.UpdateVisual();
-                    return;
-                }
-            }
-
-            Instance.sliderVelocitySetter?.Invoke(b, v);
-        }
-
-        private static void Slider_LowerSetter(IMyTerminalBlock b, float v)
-        {
-            if(Instance.Hinges.ContainsKey(b.SlimBlock.BlockDefinition.Id.SubtypeId))
-            {
-                var stator = (IMyMotorAdvancedStator)b;
-
-                if(stator.TargetVelocityRPM < 0 && (stator.Angle + LIMIT_OFFSET_RAD) < MathHelper.ToRadians(v))
-                {
-                    stator.TargetVelocityRPM = 0;
-                }
-            }
-
-            Instance.sliderLowerLimitSetter?.Invoke(b, v);
-        }
-
-        private static void Slider_UpperSetter(IMyTerminalBlock b, float v)
-        {
-            if(Instance.Hinges.ContainsKey(b.SlimBlock.BlockDefinition.Id.SubtypeId))
-            {
-                var stator = (IMyMotorAdvancedStator)b;
-
-                if(stator.TargetVelocityRPM > 0 && (stator.Angle - LIMIT_OFFSET_RAD) > MathHelper.ToRadians(v))
-                {
-                    stator.TargetVelocityRPM = 0;
-                }
-            }
-
-            Instance.sliderUpperLimitSetter?.Invoke(b, v);
-        }
-
-        private static bool Control_AddSmallTopPartVisible(IMyTerminalBlock b)
-        {
-            var func = Instance.addSmallTopPartVisible;
-            return (func == null ? true : func.Invoke(b)) && !Instance.Hinges.ContainsKey(b.SlimBlock.BlockDefinition.Id.SubtypeId);
-        }
-
-        private static bool Control_DisplacementVisible(IMyTerminalBlock b)
-        {
-            var func = Instance.displacementVisible;
-            return (func == null ? true : func.Invoke(b)) && !Instance.Hinges.ContainsKey(b.SlimBlock.BlockDefinition.Id.SubtypeId);
-        }
-        #endregion
-
-        private void ReceivedPacket(byte[] bytes)
-        {
             try
             {
-                var id = BitConverter.ToInt64(bytes, 0);
-                var block = MyEntities.GetEntityById(id);
-                block?.GameLogic.GetAs<HingeBlock>()?.FindAndAttach();
+                // replacing attach method because the vanilla one is hardcoded for vanilla blocks.
+                // also my method does additional checks to prevent attaching the top part the wrong way around which would cause clang.
+                if(Instance.Hinges.ContainsKey(b.SlimBlock.BlockDefinition.Id))
+                {
+                    b.GameLogic?.GetAs<HingeBlock>()?.FindAndAttach(showMessages: true);
+                }
+                else
+                {
+                    Instance.attachAction?.Invoke(b);
+                }
             }
             catch(Exception e)
             {
                 Log.Error(e);
             }
         }
+
+        private static float Slider_LowerMin(IMyTerminalBlock b)
+        {
+            return -GetHingeMaxAngle(b, UNLIMITED);
+        }
+
+        private static float Slider_LowerMax(IMyTerminalBlock b)
+        {
+            return GetHingeMaxAngle(b, 360f);
+        }
+
+        private static float Slider_UpperMin(IMyTerminalBlock b)
+        {
+            return -GetHingeMaxAngle(b, 360f);
+        }
+
+        private static float Slider_UpperMax(IMyTerminalBlock b)
+        {
+            return GetHingeMaxAngle(b, UNLIMITED);
+        }
+
+        private static float GetHingeMaxAngle(IMyTerminalBlock b, float defaultValue)
+        {
+            try
+            {
+                HingeData data;
+                if(Instance.Hinges.TryGetValue(b.SlimBlock.BlockDefinition.Id, out data))
+                    return data.MaxAngle;
+            }
+            catch(Exception e)
+            {
+                Log.Error(e);
+            }
+
+            return defaultValue;
+        }
+
+        private static void Slider_VelocitySetter(IMyTerminalBlock b, float v)
+        {
+            try
+            {
+                if(Instance.Hinges.ContainsKey(b.SlimBlock.BlockDefinition.Id))
+                {
+                    var stator = (IMyMotorAdvancedStator)b;
+
+                    if((stator.Angle < (stator.LowerLimitRad - LIMIT_OFFSET_RAD) && v < 0) || (stator.Angle > (stator.UpperLimitRad + LIMIT_OFFSET_RAD) && v > 0))
+                    {
+                        Instance.sliderVelocitySetter?.Invoke(b, 0);
+                        Instance.sliderVelocity.UpdateVisual();
+                        return;
+                    }
+                }
+
+                Instance.sliderVelocitySetter?.Invoke(b, v);
+            }
+            catch(Exception e)
+            {
+                Log.Error(e);
+            }
+        }
+
+        private static void Slider_LowerSetter(IMyTerminalBlock b, float v)
+        {
+            try
+            {
+                if(Instance.Hinges.ContainsKey(b.SlimBlock.BlockDefinition.Id))
+                {
+                    var stator = (IMyMotorAdvancedStator)b;
+
+                    if(stator.TargetVelocityRPM < 0 && (stator.Angle + LIMIT_OFFSET_RAD) < MathHelper.ToRadians(v))
+                    {
+                        stator.TargetVelocityRPM = 0;
+                    }
+                }
+
+                Instance.sliderLowerLimitSetter?.Invoke(b, v);
+            }
+            catch(Exception e)
+            {
+                Log.Error(e);
+            }
+        }
+
+        private static void Slider_UpperSetter(IMyTerminalBlock b, float v)
+        {
+            try
+            {
+                if(Instance.Hinges.ContainsKey(b.SlimBlock.BlockDefinition.Id))
+                {
+                    var stator = (IMyMotorAdvancedStator)b;
+
+                    if(stator.TargetVelocityRPM > 0 && (stator.Angle - LIMIT_OFFSET_RAD) > MathHelper.ToRadians(v))
+                    {
+                        stator.TargetVelocityRPM = 0;
+                    }
+                }
+
+                Instance.sliderUpperLimitSetter?.Invoke(b, v);
+            }
+            catch(Exception e)
+            {
+                Log.Error(e);
+            }
+        }
+        #endregion
     }
 }

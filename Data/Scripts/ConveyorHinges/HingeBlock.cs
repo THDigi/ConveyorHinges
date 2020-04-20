@@ -55,7 +55,7 @@ namespace Digi.ConveyorHinges
 
                 ConveyorHingesMod.HingeData data;
 
-                if(block.CubeGrid.Physics != null && ConveyorHingesMod.Instance.Hinges.TryGetValue(block.SlimBlock.BlockDefinition.Id.SubtypeId, out data))
+                if(block.CubeGrid.Physics != null && ConveyorHingesMod.Instance.Hinges.TryGetValue(block.SlimBlock.BlockDefinition.Id, out data))
                 {
                     isPlayer = !(MyAPIGateway.Multiplayer.IsServer && MyAPIGateway.Utilities.IsDedicated);
                     subparts = new MyEntitySubpart[ConveyorHingesMod.SUBPART_COUNT];
