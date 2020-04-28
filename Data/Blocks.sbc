@@ -34,8 +34,8 @@
       <BuildTimeSeconds>20</BuildTimeSeconds>
       <UseModelIntersection>true</UseModelIntersection>
       <RotorPart>ConveyorHingeHead</RotorPart>
-      <MirroringY>Z</MirroringY>
-      <MirroringZ>Y</MirroringZ>
+      <MirroringX>Z</MirroringX>
+      <MirroringZ>X</MirroringZ>
       <ResourceSinkGroup>Utility</ResourceSinkGroup>
       <RequiredPowerInput>0.002</RequiredPowerInput>
       <MaxForceMagnitude>1E9</MaxForceMagnitude>
@@ -80,8 +80,8 @@
       </BuildProgressModels>
       <BuildTimeSeconds>8</BuildTimeSeconds>
       <UseModelIntersection>true</UseModelIntersection>
-      <MirroringY>Z</MirroringY>
-      <MirroringZ>Y</MirroringZ>
+      <MirroringX>Z</MirroringX>
+      <MirroringZ>X</MirroringZ>
       <PCU>25</PCU>
     </Definition>
 
@@ -119,8 +119,8 @@
       <BuildTimeSeconds>10</BuildTimeSeconds>
       <UseModelIntersection>true</UseModelIntersection>
       <RotorPart>ConveyorHingeHead</RotorPart>
-      <MirroringY>Z</MirroringY>
-      <MirroringZ>Y</MirroringZ>
+      <MirroringX>Z</MirroringX>
+      <MirroringZ>X</MirroringZ>
       <ResourceSinkGroup>Utility</ResourceSinkGroup>
       <RequiredPowerInput>0.0002</RequiredPowerInput>
       <MaxForceMagnitude>1E6</MaxForceMagnitude>
@@ -165,8 +165,8 @@
       </BuildProgressModels>
       <BuildTimeSeconds>5</BuildTimeSeconds>
       <UseModelIntersection>true</UseModelIntersection>
-      <MirroringY>Z</MirroringY>
-      <MirroringZ>Y</MirroringZ>
+      <MirroringX>Z</MirroringX>
+      <MirroringZ>X</MirroringZ>
       <PCU>25</PCU>
     </Definition>
 
@@ -203,8 +203,8 @@
       <BuildTimeSeconds>8</BuildTimeSeconds>
       <UseModelIntersection>true</UseModelIntersection>
       <RotorPart>SmallConveyorHingeHead</RotorPart>
-      <MirroringY>Z</MirroringY>
-      <MirroringZ>Y</MirroringZ>
+      <MirroringX>Z</MirroringX>
+      <MirroringZ>X</MirroringZ>
       <ResourceSinkGroup>Utility</ResourceSinkGroup>
       <RequiredPowerInput>0.0002</RequiredPowerInput>
       <MaxForceMagnitude>1E6</MaxForceMagnitude>
@@ -248,8 +248,8 @@
       </BuildProgressModels>
       <BuildTimeSeconds>3</BuildTimeSeconds>
       <UseModelIntersection>true</UseModelIntersection>
-      <MirroringY>Z</MirroringY>
-      <MirroringZ>Y</MirroringZ>
+      <MirroringX>Z</MirroringX>
+      <MirroringZ>X</MirroringZ>
       <PCU>25</PCU>
     </Definition>
 
