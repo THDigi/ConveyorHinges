@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using Sandbox.Common.ObjectBuilders;
+using Sandbox.Definitions;
 using Sandbox.Game.Entities;
 using Sandbox.ModAPI;
 using Sandbox.ModAPI.Interfaces.Terminal;
 using VRage.Game;
 using VRage.Game.Components;
 using VRage.Game.Entity;
-using VRage.Game.ModAPI;
 using VRage.Utils;
 using VRageMath;
 
@@ -20,6 +20,8 @@ namespace Digi.ConveyorHinges
         {
             Instance = this;
             Log.ModName = "Conveyor Hinges";
+
+            CopyStats();
         }
 
         public static ConveyorHingesMod Instance = null;
@@ -66,6 +68,8 @@ namespace Digi.ConveyorHinges
             public float MaxViewDistance;
             public float BlockLengthMul;
             public float AttachRadius;
+            public MyDefinitionId CopyStatsFromBase;
+            public MyDefinitionId CopyStatsFromTop;
         }
 
         public readonly Dictionary<MyDefinitionId, HingeData> Hinges = new Dictionary<MyDefinitionId, HingeData>(MyDefinitionId.Comparer)
@@ -76,6 +80,8 @@ namespace Digi.ConveyorHinges
                 MaxViewDistance = 75,
                 BlockLengthMul = 1,
                 AttachRadius = 0.1f,
+                CopyStatsFromBase = new MyDefinitionId(typeof(MyObjectBuilder_MotorStator), "SmallStator"),
+                CopyStatsFromTop = new MyDefinitionId(typeof(MyObjectBuilder_MotorRotor), "SmallRotor"),
             },
             [new MyDefinitionId(typeof(MyObjectBuilder_MotorAdvancedStator), MEDIUM_STATOR)] = new HingeData()
             {
@@ -83,6 +89,8 @@ namespace Digi.ConveyorHinges
                 MaxViewDistance = 200,
                 BlockLengthMul = 3,
                 AttachRadius = 0.25f,
+                CopyStatsFromBase = new MyDefinitionId(typeof(MyObjectBuilder_MotorAdvancedStator), "SmallAdvancedStator"),
+                CopyStatsFromTop = new MyDefinitionId(typeof(MyObjectBuilder_MotorAdvancedRotor), "SmallAdvancedRotor"),
             },
             [new MyDefinitionId(typeof(MyObjectBuilder_MotorAdvancedStator), LARGE_STATOR)] = new HingeData()
             {
@@ -90,6 +98,8 @@ namespace Digi.ConveyorHinges
                 MaxViewDistance = 300,
                 BlockLengthMul = 1,
                 AttachRadius = 0.5f,
+                CopyStatsFromBase = new MyDefinitionId(typeof(MyObjectBuilder_MotorAdvancedStator), "LargeAdvancedStator"),
+                CopyStatsFromTop = new MyDefinitionId(typeof(MyObjectBuilder_MotorAdvancedRotor), "LargeAdvancedRotor"),
             },
         };
 
@@ -99,6 +109,84 @@ namespace Digi.ConveyorHinges
             MyStringHash.GetOrCompute("MediumConveyorHingeHead"),
             MyStringHash.GetOrCompute("LargeConveyorHingeHead"),
         };
+
+        void CopyStats()
+        {
+            foreach(var kv in Hinges)
+            {
+                var hingeId = kv.Key;
+                var hingeData = kv.Value;
+
+                MyMotorStatorDefinition hingeBaseDef = MyDefinitionManager.Static.GetCubeBlockDefinition(hingeId) as MyMotorStatorDefinition;
+                if(hingeBaseDef == null)
+                {
+                    Log.Error($"Can't find block definition for '{hingeId.ToString()}'");
+                    continue;
+                }
+
+                MyCubeBlockDefinition hingeTopDef = GetTopDef(hingeBaseDef);
+                if(hingeTopDef == null)
+                {
+                    Log.Error($"Can't find block definition for '{hingeBaseDef.TopPart}' at {hingeBaseDef.CubeSize.ToString()} size");
+                    continue;
+                }
+
+                MyMotorStatorDefinition copyBaseDef = MyDefinitionManager.Static.GetCubeBlockDefinition(hingeData.CopyStatsFromBase) as MyMotorStatorDefinition;
+                MyCubeBlockDefinition copyTopDef = MyDefinitionManager.Static.GetCubeBlockDefinition(hingeData.CopyStatsFromTop);
+
+                if(copyBaseDef == null)
+                {
+                    Log.Error($"Can't find block definition for '{hingeData.CopyStatsFromBase.ToString()}' to copy stats for '{hingeId.ToString()}'");
+                    continue;
+                }
+
+                if(copyTopDef == null)
+                {
+                    Log.Error($"Can't find block definition for '{hingeData.CopyStatsFromTop.ToString()}' to copy stats for '{hingeId.ToString()}'");
+                    continue;
+                }
+
+                hingeBaseDef.MaxForceMagnitude = copyBaseDef.MaxForceMagnitude;
+                hingeBaseDef.UnsafeTorqueThreshold = copyBaseDef.UnsafeTorqueThreshold;
+
+                hingeBaseDef.SafetyDetach = copyBaseDef.SafetyDetach;
+                hingeBaseDef.SafetyDetachMin = copyBaseDef.SafetyDetachMin;
+                hingeBaseDef.SafetyDetachMax = copyBaseDef.SafetyDetachMax;
+
+                hingeBaseDef.RequiredPowerInput = copyBaseDef.RequiredPowerInput;
+
+                CopyGenericStatsFor(hingeBaseDef, copyBaseDef);
+                CopyGenericStatsFor(hingeTopDef, copyTopDef);
+
+                //Log.Info($"Copied stats from '{hingeData.CopyStatsFromBase.ToString()}' to '{hingeId.ToString()}' (and rotor top too)");
+            }
+        }
+
+        void CopyGenericStatsFor(MyCubeBlockDefinition hingeDef, MyCubeBlockDefinition copyDef)
+        {
+            hingeDef.PCU = copyDef.PCU;
+            hingeDef.Mass = copyDef.Mass;
+
+            //hingeDef.Components = copyDef.Components;
+            //hingeDef.CriticalIntegrityRatio = copyDef.CriticalIntegrityRatio;
+            //hingeDef.IntegrityPointsPerSec = copyDef.IntegrityPointsPerSec;
+            //hingeDef.MaxIntegrity = copyDef.MaxIntegrity;
+            //hingeDef.MaxIntegrityRatio = copyDef.MaxIntegrityRatio;
+            //hingeDef.OwnershipIntegrityRatio = copyDef.OwnershipIntegrityRatio;
+        }
+
+        MyCubeBlockDefinition GetTopDef(MyMotorStatorDefinition def)
+        {
+            var group = MyDefinitionManager.Static.TryGetDefinitionGroup(def.TopPart);
+
+            if(group == null)
+            {
+                Log.Error($"Can't find blockpair named '{def.TopPart}'");
+                return null;
+            }
+
+            return (def.CubeSize == MyCubeSize.Large ? group.Large : group.Small);
+        }
 
         public override void BeforeStart()
         {
