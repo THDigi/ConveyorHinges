@@ -7,6 +7,7 @@
         <TypeId>MotorAdvancedStator</TypeId>
         <SubtypeId>LargeConveyorHinge</SubtypeId>
       </Id>
+      <PCU>100</PCU>
       <BlockPairName>ConveyorHinge</BlockPairName>
       <DisplayName>Conveyor Hinge</DisplayName>
       <Icon>Textures\Icons\LargeHinge.dds</Icon>
@@ -17,7 +18,7 @@
       <Model>Models\LargeHinge.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="10" />
-        <Component Subtype="Construction" Count="12" />
+        <Component Subtype="Construction" Count="10" />
         <Component Subtype="LargeTube" Count="4" />
         <Component Subtype="Motor" Count="4" />
         <Component Subtype="Computer" Count="2" />
@@ -27,6 +28,7 @@
       <MountPoints>
         <MountPoint Side="Back" StartX="0.2" StartY="0.2" EndX="0.8" EndY="0.8" />
       </MountPoints>
+      <IsAirTight>false</IsAirTight>
       <BuildProgressModels>
         <Model BuildPercentUpperBound="0.5" File="Models\LargeHinge_Build1.mwm" />
         <Model BuildPercentUpperBound="1.0" File="Models\LargeHinge_Build2.mwm" />
@@ -50,7 +52,6 @@
       <DamageEffectId>212</DamageEffectId>
       <DamagedSound>ParticleHeavyMech</DamagedSound>
       <PrimarySound>BlockRotor</PrimarySound>
-      <PCU>175</PCU>
     </Definition>
 
     <Definition>
@@ -58,6 +59,7 @@
         <TypeId>MotorAdvancedRotor</TypeId>
         <SubtypeId>LargeConveyorHingeHead</SubtypeId>
       </Id>
+      <PCU>1</PCU>
       <BlockPairName>ConveyorHingeHead</BlockPairName>
       <DisplayName>Conveyor Hinge Head</DisplayName>
       <Icon>Textures\Icons\LargeHingeHead.dds</Icon>
@@ -67,13 +69,14 @@
       <ModelOffset x="0" y="0" z="0" />
       <Model>Models\LargeHingeHead.mwm</Model>
       <Components>
-        <Component Subtype="SteelPlate" Count="5" />
-        <Component Subtype="LargeTube" Count="4" />
+        <Component Subtype="SteelPlate" Count="30" />
+        <Component Subtype="LargeTube" Count="10" />
       </Components>
       <CriticalComponent Subtype="SteelPlate" Index="0" />
       <MountPoints>
         <MountPoint Side="Front" StartX="0.2" StartY="0.2" EndX="0.8" EndY="0.8" />
       </MountPoints>
+      <IsAirTight>false</IsAirTight>
       <BuildProgressModels>
         <Model BuildPercentUpperBound="0.5" File="Models\LargeHingeHead_Build1.mwm" />
         <Model BuildPercentUpperBound="1.0" File="Models\LargeHingeHead_Build2.mwm" />
@@ -82,7 +85,6 @@
       <UseModelIntersection>true</UseModelIntersection>
       <MirroringX>Z</MirroringX>
       <MirroringZ>X</MirroringZ>
-      <PCU>25</PCU>
     </Definition>
 
 
@@ -92,6 +94,7 @@
         <TypeId>MotorAdvancedStator</TypeId>
         <SubtypeId>MediumConveyorHinge</SubtypeId>
       </Id>
+      <PCU>100</PCU>
       <BlockPairName>ConveyorHinge</BlockPairName>
       <DisplayName>Conveyor Hinge</DisplayName>
       <Icon>Textures\Icons\MediumHinge.dds</Icon>
@@ -101,17 +104,18 @@
       <ModelOffset x="0" y="0" z="0" />
       <Model>Models\MediumHinge.mwm</Model>
       <Components>
-        <Component Subtype="SteelPlate" Count="8" />
-        <Component Subtype="Construction" Count="8" />
-        <Component Subtype="LargeTube" Count="2" />
-        <Component Subtype="Motor" Count="2" />
-        <Component Subtype="Computer" Count="2" />
-        <Component Subtype="SteelPlate" Count="4" />
+        <Component Subtype="SteelPlate" Count="3" />
+        <Component Subtype="Construction" Count="5" />
+        <Component Subtype="SmallTube" Count="1" />
+        <Component Subtype="Motor" Count="1" />
+        <Component Subtype="Computer" Count="1" />
+        <Component Subtype="SteelPlate" Count="2" />
       </Components>
       <CriticalComponent Subtype="Motor" Index="0" />
       <MountPoints>
         <MountPoint Side="Back" StartX="0.1" StartY="0.1" EndX="2.9" EndY="2.9" />
       </MountPoints>
+      <IsAirTight>false</IsAirTight>
       <BuildProgressModels>
         <Model BuildPercentUpperBound="0.5" File="Models\MediumHinge_Build1.mwm" />
         <Model BuildPercentUpperBound="1.0" File="Models\MediumHinge_Build2.mwm" />
@@ -135,7 +139,6 @@
       <DamageEffectId>212</DamageEffectId>
       <DamagedSound>ParticleHeavyMech</DamagedSound>
       <PrimarySound>BlockRotorSmall</PrimarySound>
-      <PCU>175</PCU>
     </Definition>
 
     <Definition>
@@ -143,6 +146,7 @@
         <TypeId>MotorAdvancedRotor</TypeId>
         <SubtypeId>MediumConveyorHingeHead</SubtypeId>
       </Id>
+      <PCU>1</PCU>
       <BlockPairName>ConveyorHingeHead</BlockPairName>
       <DisplayName>Conveyor Hinge Head</DisplayName>
       <Icon>Textures\Icons\MediumHingeHead.dds</Icon>
@@ -152,13 +156,14 @@
       <ModelOffset x="0" y="0" z="0" />
       <Model>Models\MediumHingeHead.mwm</Model>
       <Components>
-        <Component Subtype="SteelPlate" Count="16" />
-        <Component Subtype="SmallTube" Count="8" />
+        <Component Subtype="SteelPlate" Count="30" />
+        <Component Subtype="LargeTube" Count="10" />
       </Components>
       <CriticalComponent Subtype="SteelPlate" Index="0" />
       <MountPoints>
         <MountPoint Side="Front" StartX="0.1" StartY="0.1" EndX="2.9" EndY="2.9" />
       </MountPoints>
+      <IsAirTight>false</IsAirTight>
       <BuildProgressModels>
         <Model BuildPercentUpperBound="0.5" File="Models\MediumHingeHead_Build1.mwm" />
         <Model BuildPercentUpperBound="1.0" File="Models\MediumHingeHead_Build2.mwm" />
@@ -167,7 +172,6 @@
       <UseModelIntersection>true</UseModelIntersection>
       <MirroringX>Z</MirroringX>
       <MirroringZ>X</MirroringZ>
-      <PCU>25</PCU>
     </Definition>
 
 
@@ -177,6 +181,7 @@
         <TypeId>MotorAdvancedStator</TypeId>
         <SubtypeId>SmallConveyorHinge</SubtypeId>
       </Id>
+      <PCU>100</PCU>
       <BlockPairName>SmallConveyorHinge</BlockPairName>
       <DisplayName>Small Conveyor Hinge</DisplayName>
       <Icon>Textures\Icons\SmallHinge.dds</Icon>
@@ -197,6 +202,7 @@
       <MountPoints>
         <MountPoint Side="Back" StartX="0.1" StartY="0.1" EndX="0.9" EndY="0.9" />
       </MountPoints>
+      <IsAirTight>false</IsAirTight>
       <BuildProgressModels>
         <Model BuildPercentUpperBound="1.0" File="Models\SmallHinge_Build1.mwm" />
       </BuildProgressModels>
@@ -219,7 +225,6 @@
       <DamageEffectId>212</DamageEffectId>
       <DamagedSound>ParticleHeavyMech</DamagedSound>
       <PrimarySound>BlockRotorSmall</PrimarySound>
-      <PCU>175</PCU>
     </Definition>
 
     <Definition>
@@ -227,6 +232,7 @@
         <TypeId>MotorAdvancedRotor</TypeId>
         <SubtypeId>SmallConveyorHingeHead</SubtypeId>
       </Id>
+      <PCU>1</PCU>
       <BlockPairName>SmallConveyorHingeHead</BlockPairName>
       <DisplayName>Small Conveyor Hinge Head</DisplayName>
       <Icon>Textures\Icons\SmallHingeHead.dds</Icon>
@@ -243,6 +249,7 @@
       <MountPoints>
         <MountPoint Side="Front" StartX="0.1" StartY="0.1" EndX="0.9" EndY="0.9" />
       </MountPoints>
+      <IsAirTight>false</IsAirTight>
       <BuildProgressModels>
         <Model BuildPercentUpperBound="1.0" File="Models\SmallHingeHead_Build1.mwm" />
       </BuildProgressModels>
@@ -250,7 +257,6 @@
       <UseModelIntersection>true</UseModelIntersection>
       <MirroringX>Z</MirroringX>
       <MirroringZ>X</MirroringZ>
-      <PCU>25</PCU>
     </Definition>
 
   </CubeBlocks>
