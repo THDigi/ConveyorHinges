@@ -19,7 +19,7 @@ namespace Digi.ConveyorHinges
         public override void LoadData()
         {
             Instance = this;
-            Log.SetUp("Conveyor Hinges", 385778606, "ConveyorHinges");
+            Log.ModName = "Conveyor Hinges";
         }
 
         public static ConveyorHingesMod Instance = null;
@@ -104,7 +104,6 @@ namespace Digi.ConveyorHinges
         {
             IsInitialized = true;
             IsPlayer = !(MyAPIGateway.Multiplayer.IsServer && MyAPIGateway.Utilities.IsDedicated);
-            Log.Init();
 
             for(int i = 0; i < SubpartNames.Length; ++i)
             {
