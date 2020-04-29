@@ -35,7 +35,7 @@ namespace Digi.ConveyorHinges
         private bool visible = false;
 
         private Vector3 curveStart;
-        private Vector3 curveHandles = Vector3.Zero;
+        private Vector3 curveHandles;
 
         private Vector3 ragdollPositionLocal;
         private Vector3 ragdollVelocityLocal;
@@ -116,6 +116,12 @@ namespace Digi.ConveyorHinges
                     return false;
                 }
 
+                if(Vector3.IsZero(ragdollPositionLocal))
+                {
+                    var endWM = subpartEnd.WorldMatrix;
+                    ragdollPositionLocal = Vector3D.Transform(endWM.Translation + endWM.Forward * blockLength, block.WorldMatrixInvScaled);
+                }
+
                 var subpartNames = ConveyorHingesMod.Instance.SubpartNames;
 
                 for(int i = 0; i < ConveyorHingesMod.SUBPART_COUNT; ++i)
@@ -184,7 +190,9 @@ namespace Digi.ConveyorHinges
 
             if(hasTop)
             {
-                curveEnd = Vector3D.Transform(block.Top.WorldMatrix.Translation + block.Top.WorldMatrix.Forward * blockLength, block.WorldMatrixInvScaled);
+                var topWM = block.Top.WorldMatrix;
+                curveEnd = Vector3D.Transform(topWM.Translation + topWM.Forward * blockLength, block.WorldMatrixInvScaled);
+                ragdollPositionLocal = curveEnd;
             }
             else
             {
